@@ -9,11 +9,18 @@ using namespace Ipopt;
 
 int main(int argv, char* argc[]){
     SmartPtr<TNLP> nlp_davs = new MAX_B0_NLP();
+    std::string optlist;
 
     SmartPtr<IpoptApplication> ip = IpoptApplicationFactory();
     ip->RethrowNonIpoptException(true);
-    ip->Options()->SetStringValue("output_file", "davs_output");
 
+    std::cout << optlist << std::endl;
+    ip->Options()->SetStringValue("output_file", "davs_output");
+    ip->Options()->SetNumericValue("bound_push", 1.E-08);
+    ip->Options()->SetNumericValue("mu_init", 1.E-05                                                );
+    ip->Options()->SetStringValue("print_info_string", "yes");
+    ip->Options()->SetIntegerValue("file_print_level", 7);
+    ip->Options()->PrintList(optlist);
     ApplicationReturnStatus status;
     status = ip->Initialize();
     if (status != Solve_Succeeded){
@@ -21,7 +28,7 @@ int main(int argv, char* argc[]){
         return (int) status; //do I have to cast this.
     }
 
-    status = ip->OptimizeNLP(nlp_davs);
+    status = ip->OptimizeTNLP(nlp_davs);
 
     if (status == Solve_Succeeded){
         std::cout << std::endl << "Solved!" << std::endl;

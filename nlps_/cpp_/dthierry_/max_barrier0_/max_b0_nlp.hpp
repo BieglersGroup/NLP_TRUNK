@@ -4,7 +4,7 @@
 
 #include "IpTNLP.hpp"
 
-using namespace Ipopt
+using namespace Ipopt;
 
 class MAX_B0_NLP: public TNLP{
 public:
